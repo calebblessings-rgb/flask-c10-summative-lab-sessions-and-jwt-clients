@@ -8,7 +8,7 @@ from extensions import db, migrate, bcrypt
 from models import User, Note
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
 
     app.config["SECRET_KEY"] = os.environ.get(
@@ -22,6 +22,9 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SESSION_COOKIE_HTTPONLY"] = True
     app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+    if test_config:
+        app.config.update(test_config)
 
     db.init_app(app)
     migrate.init_app(app, db)
